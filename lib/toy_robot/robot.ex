@@ -15,10 +15,10 @@ defmodule ToyRobot.Robot do
   """
   def move(%Robot{} = robot) do
     case robot.facing do
-      :north -> move_north(robot)
-      :east -> move_east(robot)
-      :south -> move_south(robot)
-      :west -> move_west(robot)
+      :north -> robot |> move_north
+      :east -> robot |> move_east
+      :south -> robot |> move_south
+      :west -> robot |> move_west
     end
   end
 
