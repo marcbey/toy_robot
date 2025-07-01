@@ -86,4 +86,24 @@ defmodule ToyRobot.RobotTest do
       assert robot.facing == :north
     end
   end
+
+  describe "test a sequence of moves" do
+    robot =
+      %Robot{east: 0, north: 0, facing: :north}
+      |> Robot.move()
+      |> Robot.turn_right()
+      |> Robot.move()
+      |> Robot.turn_left()
+      |> Robot.move()
+      |> Robot.move()
+      |> Robot.turn_left()
+      |> Robot.move()
+      |> Robot.turn_right()
+      |> Robot.turn_right()
+      |> Robot.move()
+      |> Robot.move()
+      |> Robot.move()
+
+    assert robot == %Robot{east: 3, north: 3, facing: :east}
+  end
 end
