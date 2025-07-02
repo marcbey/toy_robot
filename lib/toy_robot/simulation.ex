@@ -111,7 +111,6 @@ defmodule ToyRobot.Simulation do
     {:ok, %{simulation | robot: turned_robot}}
   end
 
-
   @doc """
   Turns the robot right.
 
@@ -139,5 +138,23 @@ defmodule ToyRobot.Simulation do
 
     {:ok, %{simulation | robot: turned_robot}}
   end
+
+  @doc """
+  Returns the robot's current position.
+
+  ## Examples
+
+  iex> alias ToyRobot.{Robot, Table, Simulation}
+  [ToyRobot.Robot, ToyRobot.Table, ToyRobot.Simulation]
+  iex> table = %Table{north_boundary: 4, east_boundary: 4}
+  %Table{north_boundary: 4, east_boundary: 4}
+  iex> simulation = %Simulation{
+  ...>   table: table,
+  ...>   robot: %Robot{north: 0, east: 0, facing: :north}
+  ...> }
+  iex> simulation |> Simulation.report()
+  %Robot{north: 0, east: 0, facing: :north}
+  """
+  def report(%Simulation{robot: robot}), do: robot
 
 end
