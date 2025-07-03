@@ -1,6 +1,4 @@
 defmodule ToyRobot.CommandInterpreter do
-  alias ToyRobot.{Robot, Table, Simulation}
-
   @doc """
   Interprets commands from a commands list, in preparation for running them.
 
