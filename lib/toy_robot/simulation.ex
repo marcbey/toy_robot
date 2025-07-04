@@ -100,14 +100,7 @@ defmodule ToyRobot.Simulation do
   {:ok, %Simulation{table: table,robot: %Robot{north: 0, east: 0, facing: :west}}}
   """
   def turn_left(%Simulation{robot: robot} = simulation) do
-    turned_robot =
-      case robot.facing do
-        :north -> %{robot | facing: :west}
-        :east -> %{robot | facing: :north}
-        :south -> %{robot | facing: :east}
-        :west -> %{robot | facing: :south}
-      end
-
+    turned_robot = Robot.turn_left(robot)
     {:ok, %{simulation | robot: turned_robot}}
   end
 
@@ -128,14 +121,7 @@ defmodule ToyRobot.Simulation do
   {:ok, %Simulation{table: table,robot: %Robot{north: 0, east: 0, facing: :east}}}
   """
   def turn_right(%Simulation{robot: robot} = simulation) do
-    turned_robot =
-      case robot.facing do
-        :north -> %{robot | facing: :east}
-        :east -> %{robot | facing: :south}
-        :south -> %{robot | facing: :west}
-        :west -> %{robot | facing: :north}
-      end
-
+    turned_robot = Robot.turn_right(robot)
     {:ok, %{simulation | robot: turned_robot}}
   end
 
@@ -156,14 +142,7 @@ defmodule ToyRobot.Simulation do
   {:ok, %Simulation{table: table,robot: %Robot{north: 0, east: 0, facing: :south}}}
   """
   def uturn(%Simulation{robot: robot} = simulation) do
-    turned_robot =
-      case robot.facing do
-        :north -> %{robot | facing: :south}
-        :east -> %{robot | facing: :west}
-        :south -> %{robot | facing: :north}
-        :west -> %{robot | facing: :east}
-      end
-
+    turned_robot = Robot.uturn(robot)
     {:ok, %{simulation | robot: turned_robot}}
   end
 
