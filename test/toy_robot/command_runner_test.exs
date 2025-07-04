@@ -152,4 +152,15 @@ defmodule Toyrobot.CommandRunnerTest do
 
     assert robot.east == 0
   end
+
+  test "handles a place + uturn command" do
+    %Simulation{robot: robot} =
+      [
+        {:place, %{east: 0, north: 0, facing: :west}},
+        :uturn
+      ]
+      |> CommandRunner.run()
+
+    assert robot.facing == :east
+  end
 end

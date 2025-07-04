@@ -38,7 +38,7 @@ defmodule ToyRobot.CLITest do
      end
 
      expected_output = """
-      The robot is at (0, 4) and is facing NORTH
+      The robot is at (0, 4) and is facing SOUTH
      """
 
     assert output |> String.trim() == expected_output |> String.trim()
