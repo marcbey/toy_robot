@@ -41,6 +41,7 @@ defmodule ToyRobot.CommandInterpreter do
   end
 
   defp do_interpret("MOVE"), do: :move
+  defp do_interpret("MOVE_2"), do: :move_2
   defp do_interpret("LEFT"), do: :turn_left
   defp do_interpret("RIGHT"), do: :turn_right
   defp do_interpret("REPORT"), do: :report

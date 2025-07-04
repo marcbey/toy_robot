@@ -26,6 +26,18 @@ defmodule ToyRobot.CommandRunner do
     run(rest, new_simulation)
   end
 
+  def run([:move_2 | rest], simulation) do
+    new_simulation =
+      simulation
+      |> Simulation.move_2()
+      |> case do
+        {:ok, moved_simulation} -> moved_simulation
+        {:error, :at_table_boundary} -> simulation
+      end
+
+    run(rest, new_simulation)
+  end
+
   def run([], simulation), do: simulation
 
   def run([:turn_left | rest], simulation) do
