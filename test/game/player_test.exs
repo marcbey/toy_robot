@@ -2,7 +2,7 @@ defmodule ToyRobot.Game.PlayerTest do
   use ExUnit.Case, async: true
 
   alias ToyRobot.Game.Player
-  alias ToyRobot.{Robot, Simulation}
+  alias ToyRobot.Robot
 
   describe "report" do
     setup do
