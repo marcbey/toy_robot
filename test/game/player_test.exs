@@ -2,12 +2,14 @@ defmodule ToyRobot.Game.PlayerTest do
   use ExUnit.Case, async: true
 
   alias ToyRobot.Game.Player
+  alias ToyRobot.Table
   alias ToyRobot.Robot
 
   describe "report" do
     setup do
+      table = %Table{north_boundary: 4, east_boundary: 4}
       starting_position = %Robot{north: 0, east: 0, facing: :north}
-      {:ok, player} = Player.start(starting_position)
+      {:ok, player} = Player.start(table, starting_position)
       %{player: player}
     end
 
@@ -32,8 +34,9 @@ defmodule ToyRobot.Game.PlayerTest do
 
   describe "move" do
     setup do
+      table = %Table{north_boundary: 4, east_boundary: 4}
       starting_position = %Robot{north: 0, east: 0, facing: :north}
-      {:ok, player} = Player.start(starting_position)
+      {:ok, player} = Player.start(table, starting_position)
       %{player: player}
     end
 

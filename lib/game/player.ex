@@ -1,6 +1,6 @@
 defmodule ToyRobot.Game.Player do
   use GenServer
-  alias ToyRobot.{Robot, Table, Simulation}
+  alias ToyRobot.{Robot, Simulation}
 
   @type t :: {:via, Registry, {ToyRobot.Game.PlayerRegistry, atom()}}
 
@@ -8,9 +8,8 @@ defmodule ToyRobot.Game.Player do
   Starts a new player process with the given robot position.
   Returns {:ok, pid} on success.
   """
-  @spec start(%Robot{}) :: {:ok, t()}
-  def start(position) do
-    GenServer.start(__MODULE__, position)
+  def start(table, position) do
+    GenServer.start(__MODULE__, [table: table, position: position])
   end
 
   @doc """
@@ -18,9 +17,8 @@ defmodule ToyRobot.Game.Player do
   In this function, we use GenServer.start_link/2 and this will indicate to Elixir that we’re starting a linked process.
   Returns {:ok, pid} on success.
   """
-  @spec start_link(robot: %Robot{}, name: atom()) :: {:ok, t()}
-  def start_link(robot: robot, name: name) do
-    GenServer.start_link(__MODULE__, robot, name: process_name(name))
+  def start_link(table: table, position: position, name: name) do
+    GenServer.start_link(__MODULE__, [table: table, position: position], name: process_name(name))
   end
 
   def process_name(name) do
@@ -28,16 +26,12 @@ defmodule ToyRobot.Game.Player do
   end
 
   @impl true
-  def init(robot) do
+  def init([table: table, position: position]) do
     simulation = %Simulation{
-      table: %Table{
-        north_boundary: 4,
-        east_boundary: 4
-      },
-      robot: robot
+      table: table,
+      robot: position
     }
 
-    # Second argument is the initial state for the GenServer
     {:ok, simulation}
   end
 
