@@ -1,6 +1,6 @@
 defmodule ToyRobot.Game.Player do
   use GenServer
-  alias ToyRobot.{Table, Simulation, Robot}
+  alias ToyRobot.{Robot, Table, Simulation}
 
   @type t :: pid()
 
@@ -14,7 +14,8 @@ defmodule ToyRobot.Game.Player do
   end
 
   @doc """
-  Starts a new player process linked to the current process with the given robot and name.
+  This start_link/1 function is the one that our supervisor will call when we call DynamicSupervisor.start_child/2.
+  In this function, we use GenServer.start_link/2 and this will indicate to Elixir that we’re starting a linked process.
   Returns {:ok, pid} on success.
   """
   @spec start_link(robot: %Robot{}, name: atom()) :: {:ok, t()}
@@ -40,31 +41,6 @@ defmodule ToyRobot.Game.Player do
     {:ok, simulation}
   end
 
-  @doc """
-  Asynchronously moves the robot forward one space.
-  Always returns :ok immediately (fire-and-forget).
-  The actual movement happens asynchronously inside the GenServer.
-  """
-  @spec move(t()) :: :ok
-  def move(pid) do
-    # Does not block the calling process
-    # Always returns :ok immediately
-    # Used when you don't need a response back
-    GenServer.cast(pid, :move)
-  end
-
-  @doc """
-  Synchronously gets the current robot position.
-  Blocks until the GenServer responds with the robot's current state.
-  """
-  @spec report(t()) :: %Robot{}
-  def report(pid) do
-    # Blocks the calling process until the GenServer responds
-    # Returns the actual value from the GenServer
-    #Used when you need a response back
-    GenServer.call(pid, :report)
-  end
-
   # Will be invoked when we make a call to this GenServer via the GenServer.call/2
   # We do not call this function directly ourselves, but instead it is called by some internal Elixir code
   # The first return element indicates that the GenServer will issue a reply back to the
@@ -73,7 +49,7 @@ defmodule ToyRobot.Game.Player do
   # this time around.
   @impl true
   def handle_call(:report, _from, simulation) do
-    {:reply, simulation |> Simulation.report, simulation}
+    {:reply, simulation |> Simulation.report(), simulation}
   end
 
   # Will be invoked when we make a call to this GenServer via the GenServer.cast/2
@@ -81,7 +57,32 @@ defmodule ToyRobot.Game.Player do
   # A cast message is one that is sent to the GenServer and we would use it in cases where we do not expect a reply.
   @impl true
   def handle_cast(:move, simulation) do
-    {:ok, new_simulation} = simulation |> Simulation.move
+    {:ok, new_simulation} = simulation |> Simulation.move()
     {:noreply, new_simulation}
+  end
+
+  @doc """
+  Asynchronously moves the robot forward one space.
+  Always returns :ok immediately (fire-and-forget).
+  The actual movement happens asynchronously inside the GenServer.
+  """
+  @spec move(binary()) :: :ok
+  def move(name) do
+    # Does not block the calling process
+    # Always returns :ok immediately
+    # Used when you don't need a response back
+    GenServer.cast(name, :move)
+  end
+
+  @doc """
+  Synchronously gets the current robot position.
+  Blocks until the GenServer responds with the robot's current state.
+  """
+  @spec report(binary()) :: %Robot{}
+  def report(name) do
+    # Blocks the calling process until the GenServer responds
+    # Returns the actual value from the GenServer
+    # Used when you need a response back
+    GenServer.call(name, :report)
   end
 end
