@@ -2,7 +2,7 @@ defmodule ToyRobot.Game.Player do
   use GenServer
   alias ToyRobot.{Robot, Table, Simulation}
 
-  @type t :: pid()
+  @type t :: {:via, Registry, {ToyRobot.Game.PlayerRegistry, atom()}}
 
   @doc """
   Starts a new player process with the given robot position.
@@ -66,23 +66,23 @@ defmodule ToyRobot.Game.Player do
   Always returns :ok immediately (fire-and-forget).
   The actual movement happens asynchronously inside the GenServer.
   """
-  @spec move(binary()) :: :ok
-  def move(name) do
+  @spec move(t()) :: :ok
+  def move(process_name) do
     # Does not block the calling process
     # Always returns :ok immediately
     # Used when you don't need a response back
-    GenServer.cast(name, :move)
+    GenServer.cast(process_name, :move)
   end
 
   @doc """
   Synchronously gets the current robot position.
   Blocks until the GenServer responds with the robot's current state.
   """
-  @spec report(binary()) :: %Robot{}
-  def report(name) do
+  @spec report(t()) :: %Robot{}
+  def report(process_name) do
     # Blocks the calling process until the GenServer responds
     # Returns the actual value from the GenServer
     # Used when you need a response back
-    GenServer.call(name, :report)
+    GenServer.call(process_name, :report)
   end
 end
